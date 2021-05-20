@@ -21,7 +21,10 @@ namespace PortScanner
 
         public Form1()
         {
-            InitializeComponent();      
+            InitializeComponent();
+            maskedStartPort.Click += new EventHandler(maskedTextBox_Click);
+            maskedEndPort.Click += new EventHandler(maskedTextBox_Click);
+            maskedEndPort.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -57,7 +60,7 @@ namespace PortScanner
                 try
                 {
                     statusDisplay.Text = "Scanning.";
-                    await RunPortScannerAsync(int.Parse(startPortInput.Text), int.Parse(endPortInput.Text), targetIpInput.Text, cts.Token);
+                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, cts.Token);
                 }
                 catch (Exception ex)
                 {
@@ -108,7 +111,7 @@ namespace PortScanner
             await ps.ScanAsync(token);
         }
 
-        class PortScanner
+        class PortScanner //TODO: pass form into scanner so it can write to output
         {
 
             private const int MIN_PORT = 0;
@@ -210,6 +213,24 @@ namespace PortScanner
             }
 
         }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            if(e.Position == maskedStartPort.Mask.Length)
+            {
+                Console.WriteLine(e.RejectionHint);
+            }
+            else if(e.RejectionHint.ToString() == "DigitExpected")
+            {
+                Console.WriteLine("You may only enter numbers.");
+            }
+        }
+
+        private void maskedTextBox_Click(object sender, EventArgs e)
+        {
+            maskedStartPort.Select(0, 0);
+        }
+
 
     }
 }

@@ -32,16 +32,16 @@ namespace PortScanner
             this.scanButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.maskedEndPort = new System.Windows.Forms.MaskedTextBox();
+            this.maskedStartPort = new System.Windows.Forms.MaskedTextBox();
+            this.statusDisplay = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.targetIpInput = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.endPortInput = new System.Windows.Forms.TextBox();
-            this.startPortInput = new System.Windows.Forms.TextBox();
             this.allPortsLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.statusDisplay = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -70,13 +70,13 @@ namespace PortScanner
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.SlateGray;
+            this.tabPage1.Controls.Add(this.maskedEndPort);
+            this.tabPage1.Controls.Add(this.maskedStartPort);
             this.tabPage1.Controls.Add(this.statusDisplay);
             this.tabPage1.Controls.Add(this.textBox1);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.targetIpInput);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.endPortInput);
-            this.tabPage1.Controls.Add(this.startPortInput);
             this.tabPage1.Controls.Add(this.allPortsLabel);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.scanButton);
@@ -87,6 +87,54 @@ namespace PortScanner
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Scan";
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // maskedEndPort
+            // 
+            this.maskedEndPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maskedEndPort.Location = new System.Drawing.Point(523, 5);
+            this.maskedEndPort.Mask = "00000";
+            this.maskedEndPort.Name = "maskedEndPort";
+            this.maskedEndPort.PromptChar = ' ';
+            this.maskedEndPort.Size = new System.Drawing.Size(144, 30);
+            this.maskedEndPort.TabIndex = 14;
+            this.maskedEndPort.Text = "65535";
+            this.maskedEndPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedEndPort.ValidatingType = typeof(int);
+            // 
+            // maskedStartPort
+            // 
+            this.maskedStartPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maskedStartPort.Location = new System.Drawing.Point(346, 6);
+            this.maskedStartPort.Mask = "00000";
+            this.maskedStartPort.Name = "maskedStartPort";
+            this.maskedStartPort.PromptChar = ' ';
+            this.maskedStartPort.Size = new System.Drawing.Size(145, 30);
+            this.maskedStartPort.TabIndex = 13;
+            this.maskedStartPort.Text = "0";
+            this.maskedStartPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.maskedStartPort.ValidatingType = typeof(int);
+            this.maskedStartPort.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
+            // statusDisplay
+            // 
+            this.statusDisplay.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusDisplay.Location = new System.Drawing.Point(156, 47);
+            this.statusDisplay.Multiline = true;
+            this.statusDisplay.Name = "statusDisplay";
+            this.statusDisplay.ReadOnly = true;
+            this.statusDisplay.Size = new System.Drawing.Size(622, 72);
+            this.statusDisplay.TabIndex = 12;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(8, 150);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(770, 330);
+            this.textBox1.TabIndex = 11;
+            this.textBox1.Text = "123123, 42342, 4234234, 146234, This is test input for now";
             // 
             // label3
             // 
@@ -119,28 +167,6 @@ namespace PortScanner
             this.label2.TabIndex = 8;
             this.label2.Text = "Status:";
             // 
-            // endPortInput
-            // 
-            this.endPortInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.endPortInput.Location = new System.Drawing.Point(522, 6);
-            this.endPortInput.Name = "endPortInput";
-            this.endPortInput.Size = new System.Drawing.Size(146, 30);
-            this.endPortInput.TabIndex = 6;
-            this.endPortInput.Text = "65535";
-            this.endPortInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.endPortInput.TextChanged += new System.EventHandler(this.endPort_TextChanged);
-            // 
-            // startPortInput
-            // 
-            this.startPortInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startPortInput.Location = new System.Drawing.Point(345, 6);
-            this.startPortInput.Name = "startPortInput";
-            this.startPortInput.Size = new System.Drawing.Size(146, 30);
-            this.startPortInput.TabIndex = 5;
-            this.startPortInput.Text = "0";
-            this.startPortInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.startPortInput.TextChanged += new System.EventHandler(this.startPort_TextChanged);
-            // 
             // allPortsLabel
             // 
             this.allPortsLabel.AutoSize = true;
@@ -168,31 +194,10 @@ namespace PortScanner
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(768, 486);
+            this.tabPage2.Size = new System.Drawing.Size(784, 486);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Help";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(8, 150);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(770, 330);
-            this.textBox1.TabIndex = 11;
-            this.textBox1.Text = "123123, 42342, 4234234, 146234, This is test input for now";
-            // 
-            // statusDisplay
-            // 
-            this.statusDisplay.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.statusDisplay.Location = new System.Drawing.Point(156, 47);
-            this.statusDisplay.Multiline = true;
-            this.statusDisplay.Name = "statusDisplay";
-            this.statusDisplay.ReadOnly = true;
-            this.statusDisplay.Size = new System.Drawing.Size(622, 72);
-            this.statusDisplay.TabIndex = 12;
             // 
             // Form1
             // 
@@ -218,13 +223,13 @@ namespace PortScanner
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label allPortsLabel;
-        private System.Windows.Forms.TextBox endPortInput;
-        private System.Windows.Forms.TextBox startPortInput;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox targetIpInput;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox statusDisplay;
+        private System.Windows.Forms.MaskedTextBox maskedStartPort;
+        private System.Windows.Forms.MaskedTextBox maskedEndPort;
     }
 }
 

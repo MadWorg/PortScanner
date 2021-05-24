@@ -18,7 +18,7 @@ namespace PortScanner
 
         public string OutputText { get { return portResult.Text; } set { portResult.Text += value; } }
 
-        CancellationTokenSource cts;
+        private CancellationTokenSource _cts;
 
 
 
@@ -55,9 +55,9 @@ namespace PortScanner
             
             
 
-            if(cts == null)
+            if(_cts == null)
             {
-                cts = new CancellationTokenSource();
+                _cts = new CancellationTokenSource();
                 scanButton.Text = "Stop";
                 statusDisplay.Text = "Starting scan.";
                 
@@ -65,7 +65,7 @@ namespace PortScanner
                 try
                 {
                     statusDisplay.Text = "Scanning.";
-                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, cts.Token);
+                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, _cts.Token);
                 }
                 catch (Exception ex)
                 {
@@ -73,14 +73,14 @@ namespace PortScanner
                 }
                 finally
                 {
-                    cts = null;
+                    _cts = null;
                 }
             }
             else
             {
                 scanButton.Text = "Scan";
-                cts.Cancel();
-                cts = null;
+                _cts.Cancel();
+                _cts = null;
                 Console.WriteLine("Scan ended.");
                 statusDisplay.Text = "Scan ended.";
             }
@@ -115,8 +115,6 @@ namespace PortScanner
             PortScanner ps = new PortScanner(startPort, endPort, targetIp);
             await ps.ScanAsync(token);
         }
-
-        
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {

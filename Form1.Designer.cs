@@ -35,7 +35,7 @@ namespace PortScanner
             this.maskedEndPort = new System.Windows.Forms.MaskedTextBox();
             this.maskedStartPort = new System.Windows.Forms.MaskedTextBox();
             this.statusDisplay = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.portResult = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.targetIpInput = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -73,7 +73,7 @@ namespace PortScanner
             this.tabPage1.Controls.Add(this.maskedEndPort);
             this.tabPage1.Controls.Add(this.maskedStartPort);
             this.tabPage1.Controls.Add(this.statusDisplay);
-            this.tabPage1.Controls.Add(this.textBox1);
+            this.tabPage1.Controls.Add(this.portResult);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.targetIpInput);
             this.tabPage1.Controls.Add(this.label2);
@@ -125,16 +125,15 @@ namespace PortScanner
             this.statusDisplay.Size = new System.Drawing.Size(622, 72);
             this.statusDisplay.TabIndex = 12;
             // 
-            // textBox1
+            // portResult
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(8, 150);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(770, 330);
-            this.textBox1.TabIndex = 11;
-            this.textBox1.Text = "123123, 42342, 4234234, 146234, This is test input for now";
+            this.portResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.portResult.Location = new System.Drawing.Point(8, 150);
+            this.portResult.Multiline = true;
+            this.portResult.Name = "portResult";
+            this.portResult.ReadOnly = true;
+            this.portResult.Size = new System.Drawing.Size(770, 330);
+            this.portResult.TabIndex = 11;
             // 
             // label3
             // 
@@ -226,7 +225,7 @@ namespace PortScanner
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox targetIpInput;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox portResult;
         private System.Windows.Forms.TextBox statusDisplay;
         private System.Windows.Forms.MaskedTextBox maskedStartPort;
         private System.Windows.Forms.MaskedTextBox maskedEndPort;

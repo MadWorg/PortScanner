@@ -13,11 +13,14 @@ using System.Windows.Forms;
 
 namespace PortScanner
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IOutputAccess
     {
 
-        private List<int> openPorts = new List<int>();
+        public string OutputText { get { return portResult.Text; } set { portResult.Text += value; } }
+
         CancellationTokenSource cts;
+
+
 
         public Form1()
         {
@@ -50,6 +53,8 @@ namespace PortScanner
         private async void button1_Click(object sender, EventArgs e)
         {
             
+            
+
             if(cts == null)
             {
                 cts = new CancellationTokenSource();
@@ -111,108 +116,7 @@ namespace PortScanner
             await ps.ScanAsync(token);
         }
 
-        class PortScanner //TODO: pass form into scanner so it can write to output
-        {
-
-            private const int MIN_PORT = 0;
-            private const int MAX_PORT = 65535;
-
-            List<int> _openPorts;
-
-            public int MinPort = MIN_PORT;
-            public int MaxPort = MAX_PORT;
-
-            public string TargetIP = "127.0.0.1";
-
-            public PortScanner()
-            {
-                _openPorts = new List<int>();
-            }
-
-            public PortScanner(int minPort, int maxPort, string targetIp)
-            {
-
-                if (minPort < MIN_PORT || minPort > MAX_PORT)
-                {
-                    Console.Error.WriteLine($"Min port must be a number between {MIN_PORT} and {MAX_PORT}");
-                    return;
-                }
-
-                if (maxPort < MIN_PORT || maxPort > MAX_PORT)
-                {
-                    Console.Error.WriteLine($"Max port must be a number between {MIN_PORT} and {MAX_PORT}");
-                    return;
-                }
-
-                if (maxPort < minPort)
-                {
-                    Console.Error.WriteLine($"Max port cannot be smaller than min port.");
-                    return;
-                }
-
-                IPAddress ipTest;
-                if (!IPAddress.TryParse(targetIp, out ipTest))
-                {
-                    Console.Error.WriteLine($"IP address is not valid.");
-                }
-
-
-                MinPort = minPort;
-                MaxPort = maxPort;
-                TargetIP = targetIp;
-                _openPorts = new List<int>();
-            }
-
-            public async Task ScanAsync(CancellationToken token)
-            {
-                for (int port = MinPort; port <= MaxPort; port++)
-                {
-                    token.ThrowIfCancellationRequested();
-                    await ScanPortRangeAsync(port, token);
-                }
-            }
-
-            private async Task ScanPortRangeAsync(int port, CancellationToken token)
-            {
-                if (await ScanPortAsync(port, token))
-                {
-                    _openPorts.Add(port);
-                }
-            }
-
-            private async Task<bool> ScanPortAsync(int port, CancellationToken token)
-            {
-
-                token.ThrowIfCancellationRequested();
-
-                TcpClient tcpScan = new TcpClient();
-
-                await Task.Run(() =>
-                {
-
-                    try
-                    {
-
-                        tcpScan.Connect("127.0.0.1", port);
-                        Console.WriteLine($"Port {port} is open.");
-                        tcpScan.GetStream().Close();
-                        tcpScan.Close();
-                        return true;
-                    }
-                    catch
-                    {
-                        Console.WriteLine($"Port {port} is not open.");
-                        tcpScan.Close();
-                        return false;
-                    }
-
-                });
-
-                return false;
-
-            }
-
-        }
+        
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {

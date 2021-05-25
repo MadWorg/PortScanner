@@ -1,4 +1,0 @@
-﻿Fix scan button to switch to scan when it finishes
-Improve scanning speed?
-Implement with Interface instead of passing Form1 object
-Add save functionality

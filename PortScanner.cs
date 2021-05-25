@@ -50,8 +50,7 @@ namespace PortScanner
                 return;
             }
 
-            IPAddress ipTest;
-            if (!IPAddress.TryParse(targetIp, out ipTest))
+            if (!IPAddress.TryParse(targetIp, out _)) // discards result
             {
                 Console.Error.WriteLine($"IP address is not valid.");
             }
@@ -88,8 +87,8 @@ namespace PortScanner
             token.ThrowIfCancellationRequested();
 
             TcpClient tcpScan = new TcpClient();
-            if(
-            await Task.Run(() =>
+
+            return await Task.Run(() =>
             {
 
                 try
@@ -108,12 +107,7 @@ namespace PortScanner
                     return false;
                 }
 
-            }))
-            {
-                return true;
-            }
-
-            return false;
+            });
 
         }
 

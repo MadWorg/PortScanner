@@ -13,14 +13,13 @@ using System.Windows.Forms;
 
 namespace PortScanner
 {
-    public partial class Form1 : Form, IOutputAccess
+    public partial class Form1 : Form
     {
 
         public string OutputText { get { return portResult.Text; } set { portResult.Text += value; } }
 
         private CancellationTokenSource _cts;
-
-
+        private Form1 _form;
 
         public Form1()
         {
@@ -28,6 +27,7 @@ namespace PortScanner
             maskedStartPort.Click += new EventHandler(maskedTextBox_Click);
             maskedEndPort.Click += new EventHandler(maskedTextBox_Click);
             maskedEndPort.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
+            _form = this;
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -52,8 +52,6 @@ namespace PortScanner
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            
-            
 
             if(_cts == null)
             {
@@ -65,7 +63,8 @@ namespace PortScanner
                 try
                 {
                     statusDisplay.Text = "Scanning.";
-                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, _cts.Token);
+                    portResult.Clear();
+                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, _cts.Token, _form);
                 }
                 catch (Exception ex)
                 {
@@ -74,6 +73,9 @@ namespace PortScanner
                 finally
                 {
                     _cts = null;
+                    statusDisplay.Text = "Scan concluded. Open ports are listed below.";
+                    Console.WriteLine("Finishing scan.");
+                    scanButton.Text = "Scan";
                 }
             }
             else
@@ -109,10 +111,10 @@ namespace PortScanner
 
         }
 
-        public static async Task RunPortScannerAsync(int startPort, int endPort, string targetIp, CancellationToken token)
+        public static async Task RunPortScannerAsync(int startPort, int endPort, string targetIp, CancellationToken token, Form1 form)
         {
             token.ThrowIfCancellationRequested();
-            PortScanner ps = new PortScanner(startPort, endPort, targetIp);
+            PortScanner ps = new PortScanner(startPort, endPort, targetIp, form);
             await ps.ScanAsync(token);
         }
 

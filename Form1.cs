@@ -135,7 +135,10 @@ namespace PortScanner
 
         private void maskedTextBox_Click(object sender, EventArgs e)
         {
-            maskedStartPort.Select(0, 0);
+
+            var maskedBox = (MaskedTextBox) sender;
+
+            maskedBox.Select(0, 0);
         }
 
 

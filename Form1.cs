@@ -20,7 +20,7 @@ namespace PortScanner
 
         private CancellationTokenSource _cts;
 
-
+        private Form1 form;
 
         public Form1()
         {
@@ -28,6 +28,7 @@ namespace PortScanner
             maskedStartPort.Click += new EventHandler(maskedTextBox_Click);
             maskedEndPort.Click += new EventHandler(maskedTextBox_Click);
             maskedEndPort.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
+            form = this;
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -60,12 +61,12 @@ namespace PortScanner
                 _cts = new CancellationTokenSource();
                 scanButton.Text = "Stop";
                 statusDisplay.Text = "Starting scan.";
-                
+                portResult.Clear();
 
                 try
                 {
                     statusDisplay.Text = "Scanning.";
-                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, _cts.Token);
+                    await RunPortScannerAsync(int.Parse(maskedStartPort.Text), int.Parse(maskedEndPort.Text), targetIpInput.Text, _cts.Token, form);
                 }
                 catch (Exception ex)
                 {
@@ -74,6 +75,9 @@ namespace PortScanner
                 finally
                 {
                     _cts = null;
+                    Console.WriteLine("Scan concluded.");
+                    scanButton.Text = "Scan";
+                    statusDisplay.Text = "Scan concluded, open ports are listed below.";
                 }
             }
             else
@@ -81,8 +85,8 @@ namespace PortScanner
                 scanButton.Text = "Scan";
                 _cts.Cancel();
                 _cts = null;
-                Console.WriteLine("Scan ended.");
-                statusDisplay.Text = "Scan ended.";
+                Console.WriteLine("Scan interrupted.");
+                statusDisplay.Text = "Scan concluded, open ports are listed below.";
             }
 
             
@@ -109,10 +113,10 @@ namespace PortScanner
 
         }
 
-        public static async Task RunPortScannerAsync(int startPort, int endPort, string targetIp, CancellationToken token)
+        public static async Task RunPortScannerAsync(int startPort, int endPort, string targetIp, CancellationToken token, Form1 form)
         {
             token.ThrowIfCancellationRequested();
-            PortScanner ps = new PortScanner(startPort, endPort, targetIp);
+            PortScanner ps = new PortScanner(startPort, endPort, targetIp, form);
             await ps.ScanAsync(token);
         }
 
@@ -125,6 +129,7 @@ namespace PortScanner
             else if(e.RejectionHint.ToString() == "DigitExpected")
             {
                 Console.WriteLine("You may only enter numbers.");
+                statusDisplay.Text = "You may only enter digits.";
             }
         }
 

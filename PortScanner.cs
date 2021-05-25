@@ -22,12 +22,14 @@ namespace PortScanner
 
         public string TargetIP = "127.0.0.1";
 
+        private Form1 form;
+
         public PortScanner()
         {
             _openPorts = new List<int>();
         }
 
-        public PortScanner(int minPort, int maxPort, string targetIp)
+        public PortScanner(int minPort, int maxPort, string targetIp, Form1 form)
         {
 
             if (minPort < MIN_PORT || minPort > MAX_PORT)
@@ -58,6 +60,7 @@ namespace PortScanner
             MinPort = minPort;
             MaxPort = maxPort;
             TargetIP = targetIp;
+            this.form = form;
             _openPorts = new List<int>();
         }
 
@@ -74,6 +77,7 @@ namespace PortScanner
         {
             if (await ScanPortAsync(port, token))
             {
+                form.OutputText = port.ToString();
                 _openPorts.Add(port);
             }
         }
@@ -84,7 +88,7 @@ namespace PortScanner
             token.ThrowIfCancellationRequested();
 
             TcpClient tcpScan = new TcpClient();
-
+            if(
             await Task.Run(() =>
             {
 
@@ -104,7 +108,10 @@ namespace PortScanner
                     return false;
                 }
 
-            });
+            }))
+            {
+                return true;
+            }
 
             return false;
 
